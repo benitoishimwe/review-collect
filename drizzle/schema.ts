@@ -16,6 +16,7 @@ export const users = mysqlTable("users", {
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }), // Stripe customer ID
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -35,6 +36,11 @@ export const businesses = mysqlTable("businesses", {
   phone: varchar("phone", { length: 32 }),
   address: text("address"),
   logoUrl: varchar("logoUrl", { length: 1024 }),
+  subscriptionTier: mysqlEnum("subscriptionTier", ["free", "starter", "pro"]).default("free").notNull(),
+  stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }), // Stripe subscription ID
+  customBrandingEnabled: int("customBrandingEnabled").default(0).notNull(), // 1 = enabled (Pro)
+  analyticsEnabled: int("analyticsEnabled").default(0).notNull(), // 1 = enabled (Pro)
+  emailNotificationsEnabled: int("emailNotificationsEnabled").default(0).notNull(), // 1 = enabled (Pro)
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -76,3 +82,21 @@ export const reviews = mysqlTable("reviews", {
 
 export type Review = typeof reviews.$inferSelect;
 export type InsertReview = typeof reviews.$inferInsert;
+
+// ─── Subscriptions (billing history) ──────────────────────────────────────────
+export const subscriptions = mysqlTable("subscriptions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(), // FK → users.id
+  stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }).notNull().unique(),
+  stripePriceId: varchar("stripePriceId", { length: 255 }).notNull(),
+  tier: mysqlEnum("tier", ["starter", "pro"]).notNull(),
+  status: mysqlEnum("status", ["active", "past_due", "canceled", "unpaid"]).notNull(),
+  currentPeriodStart: timestamp("currentPeriodStart").notNull(),
+  currentPeriodEnd: timestamp("currentPeriodEnd").notNull(),
+  canceledAt: timestamp("canceledAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Subscription = typeof subscriptions.$inferSelect;
+export type InsertSubscription = typeof subscriptions.$inferInsert;

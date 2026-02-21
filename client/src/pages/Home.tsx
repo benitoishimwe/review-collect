@@ -58,6 +58,9 @@ export default function Home() {
             <span className="font-serif font-semibold text-lg text-primary">ReviewCollect</span>
           </div>
           <div className="flex items-center gap-3">
+            <Button variant="ghost" onClick={() => navigate("/pricing")} className="text-primary">
+              Pricing
+            </Button>
             {!loading && (
               isAuthenticated ? (
                 <Button onClick={() => navigate("/dashboard")} className="bg-primary text-primary-foreground hover:bg-primary/90">

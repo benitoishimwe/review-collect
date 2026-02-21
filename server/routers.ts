@@ -15,12 +15,15 @@ import {
   markReviewAsWinner,
   updateCampaign,
   upsertBusiness,
+  getSubscriptionByUserId,
+  updateUserStripeCustomerId,
 } from "./db";
 import { notifyOwner } from "./_core/notification";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
+import { subscriptionRouter } from "./routers-subscription";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -37,6 +40,7 @@ function generateSlug(name: string): string {
 
 export const appRouter = router({
   system: systemRouter,
+  subscription: subscriptionRouter,
 
   auth: router({
     me: publicProcedure.query((opts) => opts.ctx.user),

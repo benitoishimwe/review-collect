@@ -36,3 +36,14 @@
 
 ## Phase 6: Enhancements
 - [x] Add "Share to Google" button on review success page
+
+## Phase 7: Stripe Subscriptions
+- [x] Set up Stripe integration with webdev_add_feature
+- [x] Update DB schema: subscription tier, status, Stripe customer/subscription IDs
+- [x] Create Stripe product/price IDs for Starter ($29) and Pro ($79) tiers
+- [x] Build pricing page with tier comparison
+- [x] Build Stripe checkout flow (redirect to Stripe Checkout)
+- [ ] Build subscription management dashboard (current plan, billing history, cancel)
+- [ ] Implement webhook handler for subscription events (created, updated, deleted)
+- [x] Add feature gates: analytics (Pro only), email notifications (Pro only), custom branding (Pro only)
+- [ ] Test subscription flow end-to-end

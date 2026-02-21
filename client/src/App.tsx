@@ -12,12 +12,14 @@ import Reviews from "./pages/Reviews";
 import QRCode from "./pages/QRCode";
 import ReviewPage from "./pages/ReviewPage";
 import ReviewSuccess from "./pages/ReviewSuccess";
+import Pricing from "./pages/Pricing";
 
 function Router() {
   return (
     <Switch>
       {/* Public routes */}
       <Route path="/" component={Home} />
+      <Route path="/pricing" component={Pricing} />
       <Route path="/review/:slug" component={ReviewPage} />
       <Route path="/review/:slug/success" component={ReviewSuccess} />
 
