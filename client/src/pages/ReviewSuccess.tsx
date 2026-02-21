@@ -1,7 +1,7 @@
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { useParams, useLocation } from "wouter";
-import { Star, Trophy, CheckCircle2, ArrowLeft } from "lucide-react";
+import { Star, Trophy, CheckCircle2, ArrowLeft, Share2 } from "lucide-react";
 
 export default function ReviewSuccess() {
   const params = useParams<{ slug: string }>();
@@ -15,6 +15,12 @@ export default function ReviewSuccess() {
 
   const business = data?.business;
   const campaign = data?.campaign;
+
+  const handleShareToGoogle = () => {
+    if (!business?.name) return;
+    const googleReviewUrl = `https://www.google.com/search?q=${encodeURIComponent(business.name)} reviews`;
+    window.open(googleReviewUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -62,14 +68,23 @@ export default function ReviewSuccess() {
               We truly appreciate you taking the time.
             </p>
 
-            <Button
-              variant="outline"
-              onClick={() => navigate(`/review/${slug}`)}
-              className="border-border"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Review Page
-            </Button>
+            <div className="space-y-2">
+              <Button
+                onClick={handleShareToGoogle}
+                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg shadow-blue-500/20"
+              >
+                <Share2 className="w-4 h-4 mr-2" />
+                Share to Google
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate(`/review/${slug}`)}
+                className="w-full border-border"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Review Page
+              </Button>
+            </div>
           </div>
         </div>
       </div>
